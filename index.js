@@ -2,6 +2,7 @@ var blessed = require('blessed'),
     contrib = require('blessed-contrib');
 
 var screen = blessed.screen({
+  tput: true,
   autoPadding: true,
   smartCSR: true,
   dockBorders: true
@@ -57,7 +58,7 @@ var table = blessed.listtable({
   border: 'line',
   align: 'center',
   tags: true,
-  keys: true,
+  keys: false,
   width: '100%',
   height: '15%',
   vi: true,
@@ -155,6 +156,7 @@ list.on('keypress', function(ch, key) {
     return;
   }
 });
+
 //
 ///////////////////////////////////
 
@@ -181,34 +183,43 @@ var fm = blessed.filemanager({
   }
 });
 
-var box = blessed.box({
-  parent: screen,
-  style: {
-    bg: 'green'
-  },
-  border: 'line',
-  height: 'half',
-  width: 'half',
-  top: 'center',
-  left: 'center',
-  hidden: true
+fm.on('keypress', function(ch, key) {
+    if (key.name === 'up' || key.name === 'k') {
+      screen.render();
+      return;
+    } else if (key.name === 'down' || key.name === 'j') {
+      screen.render();
+      return;
+    }
 });
 
+fm.hide();
 fm.refresh();
 
-screen.render();
-
-screen.key('q', function() {
-  process.exit(0);
-});
 /////////////////////////////////
 
 screen.append(box);
+
+screen.key(['s', 'h'], function(ch, key) {
+  if(ch === 's'){
+    fm.focus();
+    fm.show();
+    list.hide();
+    fm.refresh();
+    screen.render();
+  }
+  else if (ch === 'h') {
+    fm.hide();
+    list.focus();
+    list.show();
+    screen.render();
+  }
+});
 
 screen.key(['escape', 'q', 'C-c'], function(ch, key) {
   return process.exit(0);
 });
 
-box.focus();
+//box.focus();
 
 screen.render();
