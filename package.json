@@ -1,0 +1,15 @@
+{
+  "name": "term-tunes",
+  "version": "1.0.0",
+  "description": "a simple command line music player using blessed ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Arinde Eniola <eniola.arinde@andela.com>",
+  "license": "ISC",
+  "dependencies": {
+    "blessed": "^0.1.61",
+    "blessed-contrib": "^2.2.0"
+  }
+}
