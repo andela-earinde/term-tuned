@@ -8,14 +8,14 @@ var screen = blessed.screen({
   dockBorders: true
 });
 
-screen.title = "term-tunes";
+screen.title = "Term-Tunes";
 
 screen.append(blessed.text({
   top: 0,
   left: 2,
   width: '100%',
   //bg: 'blue',
-  content: '{green-fg}Welcome to term tunes{/green-fg}',
+  content: '{green-fg}Welcome to Term Tunes{/green-fg}',
   style: {
     bg: '#0000ff'
   },
@@ -26,28 +26,144 @@ screen.append(blessed.text({
 
 ////////////////////////////////
 //widget for handling tht boxes
+///////////////////////////////
 var box = blessed.box({
   top: '70%',
   left: 'center',
   width: '100%',
   height: '40%',
-  content: 'Hello {bold}World{/bold}!',
   tags: true,
   border: {
     type: 'line'
   },
   style: {
     fg: 'white',
-    bg: 'magenta',
+    bg: 'black',
     border: {
       fg: '#f0f0f0'
     },
+  }
+});
+
+screen.append(box);
+
+//TODO: reduce this button instance: make it DRY
+//insert start button int box wigdet
+var play = blessed.button({
+  parent: box,
+  mouse: true,
+  keys: true,
+  shrink: true,
+  padding: {
+    left: 1,
+    right: 1
+  },
+  tags: true,
+  height: '50%',
+  width: '20%',
+  left: 'center',
+  top: 'center',
+  shrink: true,
+  name: 'Play',
+  content: '{center}\nPlay{/center}',
+  style: {
+    bg: 'blue',
+    focus: {
+      bg: 'red'
+    },
     hover: {
-      bg: 'green'
+      bg: 'red'
+    }
+  }
+});
+
+//insret button next
+var next = blessed.button({
+  parent: box,
+  mouse: true,
+  keys: true,
+  shrink: true,
+  padding: {
+    left: 1,
+    right: 1
+  },
+  tags: true,
+  height: '50%',
+  width: '20%',
+  left: '60%',
+  top: 'center',
+  shrink: true,
+  name: 'Next',
+  content: '{center}\nNext{/center}',
+  style: {
+    bg: 'blue',
+    focus: {
+      bg: 'red'
+    },
+    hover: {
+      bg: 'red'
+    }
+  }
+});
+
+var previous = blessed.button({
+  parent: box,
+  mouse: true,
+  keys: true,
+  shrink: true,
+  padding: {
+    left: 1,
+    right: 1
+  },
+  tags: true,
+  height: '50%',
+  width: '20%',
+  left: '20%',
+  top: 'center',
+  shrink: true,
+  name: 'Previous',
+  content: '{center}\nPrevious{/center}',
+  style: {
+    bg: 'blue',
+    focus: {
+      bg: 'red'
+    },
+    hover: {
+      bg: 'red'
+    }
+  }
+});
+
+var add = blessed.button({
+  parent: box,
+  mouse: true,
+  keys: true,
+  shrink: true,
+  padding: {
+    left: 1,
+    right: 1
+  },
+  tags: true,
+  left: '0%',
+  top: 'center',
+  shrink: true,
+  name: 'add',
+  width: '10%',
+  height: '30%',
+  content: '{center}\nAdd{/center}',
+  style: {
+    bg: 'blue',
+    focus: {
+      bg: 'red'
+    },
+    hover: {
+      bg: 'red'
     }
   }
 });
 ///////////////////////////////////////
+//End of Box widget
+////////////////////////////////////
 
 //////////////////////////////////////////
 var table = blessed.listtable({
@@ -86,7 +202,6 @@ var data = [
 
 table.setData(data);
 
-table.focus();
 screen.append(table);
 /////////////////////////////////
 
@@ -183,22 +298,10 @@ var fm = blessed.filemanager({
   }
 });
 
-fm.on('keypress', function(ch, key) {
-    if (key.name === 'up' || key.name === 'k') {
-      screen.render();
-      return;
-    } else if (key.name === 'down' || key.name === 'j') {
-      screen.render();
-      return;
-    }
-});
-
 fm.hide();
 fm.refresh();
 
 /////////////////////////////////
-
-screen.append(box);
 
 screen.key(['s', 'h'], function(ch, key) {
   if(ch === 's'){
@@ -220,6 +323,13 @@ screen.key(['escape', 'q', 'C-c'], function(ch, key) {
   return process.exit(0);
 });
 
-//box.focus();
-
 screen.render();
+
+//export the widgets to be used in the player logic
+exports.screen = screen;
+exports.fm = fm;
+exports.list = list;
+exports.box = box;
+exports.play = play;
+exports.previous = previous;
+exports.next = next;
