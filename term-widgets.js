@@ -229,18 +229,7 @@ var list = blessed.list({
   left: 'center',
   tags: true,
   invertSelected: false,
-  items: [
-    'one',
-    '{red-fg}two{/red-fg}',
-    'three',
-    'four',
-    'five',
-    'six',
-    'seven',
-    'eight',
-    'nine',
-    'ten'
-  ],
+  items: [],
   scrollbar: {
     ch: ' ',
     track: {
@@ -254,11 +243,6 @@ var list = blessed.list({
 
 screen.append(list);
 list.select(0);
-
-
-var item = list.items[1];
-list.removeItem(list.items[1]);
-list.insertItem(1, item.getContent());
 
 list.on('keypress', function(ch, key) {
   if (key.name === 'up' || key.name === 'k') {
@@ -285,10 +269,10 @@ var fm = blessed.filemanager({
     }
   },
   height: 'half',
-  width: 'half',
+  width: '100%',
   top: 'center',
   left: 'center',
-  label: ' {blue-fg}%path{/blue-fg} ',
+  label: ' {blue-fg}%path{/blue-fg} (press \'s\' to select the directory to scan for music)',
   cwd: process.env.HOME,
   keys: true,
   vi: true,
@@ -302,22 +286,6 @@ fm.hide();
 fm.refresh();
 
 /////////////////////////////////
-
-screen.key(['s', 'h'], function(ch, key) {
-  if(ch === 's'){
-    fm.focus();
-    fm.show();
-    list.hide();
-    fm.refresh();
-    screen.render();
-  }
-  else if (ch === 'h') {
-    fm.hide();
-    list.focus();
-    list.show();
-    screen.render();
-  }
-});
 
 screen.key(['escape', 'q', 'C-c'], function(ch, key) {
   return process.exit(0);
@@ -333,3 +301,4 @@ exports.box = box;
 exports.play = play;
 exports.previous = previous;
 exports.next = next;
+exports.add = add;
