@@ -24,9 +24,10 @@ screen.append(blessed.text({
   align: 'center'
 }));
 
-////////////////////////////////
-//widget for handling tht boxes
-///////////////////////////////
+/**
+ * This draws the buttom box widget
+ * The container for the buttons
+ */
 var box = blessed.box({
   top: '70%',
   left: 'center',
@@ -44,8 +45,6 @@ var box = blessed.box({
     },
   }
 });
-
-screen.append(box);
 
 //TODO: reduce this button instance: make it DRY
 //insert start button int box wigdet
@@ -77,7 +76,7 @@ var play = blessed.button({
   }
 });
 
-//insret button next
+//insert button next
 var next = blessed.button({
   parent: box,
   mouse: true,
@@ -106,6 +105,7 @@ var next = blessed.button({
   }
 });
 
+//insert buton previous into th box
 var previous = blessed.button({
   parent: box,
   mouse: true,
@@ -134,6 +134,7 @@ var previous = blessed.button({
   }
 });
 
+//insert add button inside the box
 var add = blessed.button({
   parent: box,
   mouse: true,
@@ -161,11 +162,10 @@ var add = blessed.button({
     }
   }
 });
-///////////////////////////////////////
-//End of Box widget
-////////////////////////////////////
 
-//////////////////////////////////////////
+/**
+ * The header for seprating describing the music
+ */
 var table = blessed.listtable({
   parent: screen,
   top: '5%',
@@ -202,11 +202,9 @@ var data = [
 
 table.setData(data);
 
-screen.append(table);
-/////////////////////////////////
-
-////////////////////
-//list section
+/**
+ * This widget is the container for displaying the playlist
+ */
 var list = blessed.list({
   parent: screen,
   top: '20%',
@@ -241,9 +239,9 @@ var list = blessed.list({
   }
 });
 
-screen.append(list);
 list.select(0);
 
+//listen for key event for playlist navigation
 list.on('keypress', function(ch, key) {
   if (key.name === 'up' || key.name === 'k') {
     list.up();
@@ -256,10 +254,10 @@ list.on('keypress', function(ch, key) {
   }
 });
 
-//
-///////////////////////////////////
 
-//////////////////////////////////
+/**
+ * This widget is responsible for displaying the file system
+ */
 var fm = blessed.filemanager({
   parent: screen,
   border: 'line',
@@ -285,12 +283,15 @@ var fm = blessed.filemanager({
 fm.hide();
 fm.refresh();
 
-/////////////////////////////////
-
+//key events to terminate the player
 screen.key(['escape', 'q', 'C-c'], function(ch, key) {
   return process.exit(0);
 });
 
+//append the widgets and renddr the screen
+screen.append(box);
+screen.append(list);
+screen.append(table);
 screen.render();
 
 //export the widgets to be used in the player logic

@@ -24,3 +24,14 @@ exports.findMusic = function findMusic(startDir, filetype) {
     };
     return musicFiles;
 };
+
+exports.storeMusicDir = function(filename, content) {
+  fs.writeFile(filename, content, function(err) {
+    if(err) console.log(err);
+  });
+}
+
+exports.readMusicDir = function(filename) {
+  return fs.readFileSync(filename, {encoding: 'utf-8'})
+}
+
