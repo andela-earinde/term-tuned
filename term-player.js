@@ -19,7 +19,8 @@ var widgets = require('./term-widgets.js'),
 
 
 var currentDir = "";
-var playlist;
+var playlist
+var currentMusic = "";
 
 //check if a music directory has been save
 // and load it to the playlist
@@ -32,10 +33,10 @@ function checkSavedDirOrLoad(currentDir) {
   else if(currentDir) {
     li = findMusic(currentDir, '.mp3');
   }  
- li.forEach(function(file) {
+  li.forEach(function(file) {
     list.add(file);
   });
-  playlist = new Player(li);
+  currentMusic = list.items[0].content;
   list.show();
   fm.hide();
   list.focus();
@@ -63,10 +64,12 @@ screen.key(['s'], function(ch, key){
 
 //listen for play button press event
 play.on('press', function() {
- playlist.play();
+  playlist = new Player(currentMusic);
+  playlist.play(function(err, player) {
+    console.log(player);
+  });
 });
 
 //listen for next button event
 next.on('press', function() {
-  playlist.next();
 });
